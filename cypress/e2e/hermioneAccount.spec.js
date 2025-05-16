@@ -3,8 +3,8 @@ import { faker } from '@faker-js/faker';
 /// <reference types='cypress' />
 
 describe('Bank app', () => {
-  const depositAmount = `${faker.number.int({ min: 500, max: 1000 })}`;
-  const withdrawAmount = `${faker.number.int({ min: 50, max: 500 })}`;
+  const depositAmount = faker.number.int({ min: 500, max: 1000 });
+  const withdrawAmount = faker.number.int({ min: 50, max: 500 });
 
   before(() => {
     cy.visit('/');
@@ -26,24 +26,24 @@ describe('Bank app', () => {
         cy.get('.center strong').eq(2).should('have.text', 'Dollar');
 
         cy.contains('Deposit').click();
-        cy.get('input[ng-model="amount"]').type(depositAmount);
+        cy.get('input[ng-model="amount"]').type(`${depositAmount}`);
         cy.get('button[type="submit"]').contains('Deposit').click();
 
         cy.get('.error').should('contain.text', 'Deposit Successful');
 
         cy.get('.center strong')
           .eq(1)
-          .should('have.text', (initialBalance + depositAmount).toString());
+          .should('have.text', (`${initialBalance + depositAmount}`).toString());
 
         cy.contains('Withdrawl').click();
-        cy.get('input[ng-model="amount"]').type(withdrawAmount);
+        cy.get('input[ng-model="amount"]').type(`${withdrawAmount}`);
         cy.get('button[type="submit"]').contains('Withdraw').click();
 
         cy.get('.error').should('contain.text', 'Transaction successful');
 
         cy.get('.center strong')
           .eq(1)
-          .should('have.text', (initialBalance + depositAmount - withdrawAmount).toString());
+          .should('have.text', (`${initialBalance + depositAmount - withdrawAmount}`).toString());
 
         cy.contains('Transactions').click();
 
